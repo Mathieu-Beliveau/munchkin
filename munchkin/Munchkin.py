@@ -4,12 +4,12 @@ from PyQt5.QtCore import QThread
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QApplication, QMainWindow, QSystemTrayIcon, QMenu, QAction
 
-from ScreenLocker import ScreenLocker
-from Status import Status
-from argparser import parser
+from munchkin.ScreenLocker import ScreenLocker
+from munchkin.Status import Status
+from munchkin.argparser import parser
 
 
-class MainWindow(QMainWindow):
+class Munchkin(QMainWindow):
     def __init__(self, application):
         super().__init__()
         self.application = application
@@ -91,11 +91,4 @@ class MainWindow(QMainWindow):
 
     def exit(self):
         self.application.quit()
-
-
-if __name__ == "__main__":
-    app = QApplication(sys.argv)
-    app.setApplicationName("Munchkin")
-    window = MainWindow(app)
-    sys.exit(app.exec())
 

@@ -3,7 +3,7 @@ import subprocess
 
 from PyQt5.QtCore import QObject, QTimer, pyqtSignal
 
-from BlueToothRSSI import BluetoothRSSI
+from munchkin.BlueToothRSSI import BluetoothRSSI
 
 
 class ScreenLocker(QObject):
