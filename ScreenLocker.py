@@ -3,13 +3,16 @@ import subprocess
 import threading
 import time
 
+from PyQt5.QtCore import QObject
+
 from BlueToothRSSI import BluetoothRSSI
 
 
-class ScreenLocker:
+class ScreenLocker(QObject):
     SLEEP = 1
 
     def __init__(self, context, device_address):
+        super().__init__()
         self.context = context
         self.device_address = device_address
 
@@ -29,13 +32,4 @@ class ScreenLocker:
             else:
                 b.connect()
             time.sleep(1)
-
-    def start_monitoring_thread(self):
-        thread = threading.Thread(
-            target=self.monitor_and_lock,
-            args=()
-        )
-        thread.daemon = True
-        thread.start()
-        return thread
 
