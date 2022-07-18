@@ -1,12 +1,11 @@
-import sys
-
 from PyQt5.QtCore import QThread
 from PyQt5.QtGui import QIcon
-from PyQt5.QtWidgets import QApplication, QMainWindow, QSystemTrayIcon, QMenu, QAction
+from PyQt5.QtWidgets import QMainWindow, QSystemTrayIcon, QMenu, QAction
 
 from munchkin.ScreenLocker import ScreenLocker
 from munchkin.Status import Status
 from munchkin.argparser import parser
+import munchkin.icons_resource
 
 
 class Munchkin(QMainWindow):
@@ -81,13 +80,13 @@ class Munchkin(QMainWindow):
             self.tray.setIcon(self.get_connection_loss_icon())
 
     def get_standard_icon(self):
-        return QIcon("icons/{}/standard.svg".format(self.context.theme))
+        return QIcon(":icons/{}/standard.svg".format(self.context.theme))
 
     def get_paused_icon(self):
-        return QIcon("icons/{}/paused.svg".format(self.context.theme))
+        return QIcon(":icons/{}/paused.svg".format(self.context.theme))
 
     def get_connection_loss_icon(self):
-        return QIcon("icons/{}/connection_lost.svg".format(self.context.theme))
+        return QIcon(":icons/{}/connection_lost.svg".format(self.context.theme))
 
     def exit(self):
         self.application.quit()

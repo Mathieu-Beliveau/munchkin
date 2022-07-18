@@ -1,0 +1,10 @@
+<!DOCTYPE RCC><RCC version="1.0">
+<qresource prefix="/">
+   <file>icons/dark/connection_lost.svg</file>
+   <file>icons/dark/paused.svg</file>
+   <file>icons/dark/standard.svg</file>
+      <file>icons/dark/connection_lost.svg</file>
+   <file>icons/dark/paused.svg</file>
+   <file>icons/dark/standard.svg</file>
+</qresource>
+</RCC>
