@@ -34,12 +34,7 @@ class ScreenLocker(QObject):
             self.brssi.connect()
 
     def polling_start(self):
-        # slot to call upon when timer should start the routine.
         self.poller.start(1000)
-        # the argument specifies the milliseconds the timer waits in between
-        # calls of the polling routine. If you want to emulate the polling
-        # routine in a while loop, you could pass 0 ms...
 
     def polling_stop(self):
-        # This simply stops the timer. The timer is still "alive" after.
         self.poller.stop()

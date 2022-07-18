@@ -1,10 +1,8 @@
 import sys
-import time
-import traceback
 
-from PyQt5.QtCore import QRunnable, QThreadPool, pyqtSignal, QObject, pyqtSlot, QThread
+from PyQt5.QtCore import QThread
 from PyQt5.QtWidgets import QApplication, QMainWindow, QSystemTrayIcon, QMenu, QStyle, QAction, QPushButton, \
-    QHBoxLayout, QVBoxLayout, QWidget
+    QVBoxLayout, QWidget
 
 from ScreenLocker import ScreenLocker
 from argparser import parser
@@ -13,6 +11,7 @@ from argparser import parser
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
+        self.centralWidget = QWidget()
         self.tray = QSystemTrayIcon()
         self.start_action = QAction("Start", self)
         self.pause_action = QAction("Pause", self)
@@ -29,8 +28,6 @@ class MainWindow(QMainWindow):
             self.create_thread(device_address)
             for device_address in self.context.devices
         ]
-
-    def start_monitoring(self):
         for thread in self.threads:
             thread.start()
 
@@ -39,18 +36,16 @@ class MainWindow(QMainWindow):
         worker = ScreenLocker(self.context, device_address=device_address)
         worker.moveToThread(thread)
         thread.started.connect(worker.polling_start)
+        self.start_action.triggered.connect(worker.polling_start)
         self.pause_action.triggered.connect(worker.polling_stop)
         self.workers.append(worker)
         return thread
 
     def setup_ui(self):
-        self.centralWidget = QWidget()
         self.setCentralWidget(self.centralWidget)
         self.tray.setIcon(self.style().standardIcon(QStyle.SP_ComputerIcon))
-        # Tray menu
         tray_menu = QMenu()
         tray_menu.addAction(self.start_action)
-        self.start_action.triggered.connect(self.start_monitoring)
         tray_menu.addAction(self.pause_action)
         tray_menu.addAction(self.quit_action)
         self.tray.setContextMenu(tray_menu)
@@ -63,6 +58,7 @@ class MainWindow(QMainWindow):
 
     def queef(self):
         pass
+
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
