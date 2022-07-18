@@ -1,10 +1,10 @@
-#Munchkin
+# Munchkin
 
-##About
+## About
 
 Munchkin is a simple python application to automatically lock your screen when you are away.
 
-##How it works
+## How it works
 
 The application looks for a list of bluetooth devices (specified with the --devices arg.) 
 and will lock the screen as soon as the link quality between your PC and any of those devices drops.
@@ -17,7 +17,7 @@ distance from your PC.
 The application lives in your system tray. It will show a red icon when encountering a true connection loss.
 To prevent locking the user out, the application enters standby mode when failing to reach your bluetooth devices.
 
-##Runtime Arguments
+## Runtime Arguments
 
 ``--devices`` A comma separated list of bluetooth addresses to scan for (in the XX:XX:XX:XX:XX:XX format).
 
