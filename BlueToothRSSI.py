@@ -1,3 +1,5 @@
+import atexit
+
 import bluetooth
 import bluetooth._bluetooth as bt
 import struct
@@ -16,6 +18,7 @@ class BluetoothRSSI(object):
         self.bt_sock.settimeout(10)
         self.connected = False
         self.cmd_pkt = None
+        atexit.register(self.cleanup)
 
     def prep_cmd_pkt(self):
         reqstr = struct.pack(
@@ -33,6 +36,8 @@ class BluetoothRSSI(object):
             return False
 
     def connect(self):
+        if self.bt_sock is not None:
+            self.bt_sock.close()
         self.bt_sock = bluetooth.BluetoothSocket(bluetooth.L2CAP)
         response = self.bt_sock.connect_ex((self.addr, 1))  # PSM 1 - Service Discovery
         return response == 0
@@ -48,3 +53,7 @@ class BluetoothRSSI(object):
             return rssi
         except IOError:
             return None
+
+    def cleanup(self):
+        if self.bt_sock is not None:
+            self.bt_sock.close()

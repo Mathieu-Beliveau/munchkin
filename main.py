@@ -9,8 +9,9 @@ from argparser import parser
 
 
 class MainWindow(QMainWindow):
-    def __init__(self):
+    def __init__(self, application):
         super().__init__()
+        self.application = application
         self.tray = QSystemTrayIcon()
         self.start_action = QAction("Start", self)
         self.pause_action = QAction("Pause", self)
@@ -47,6 +48,7 @@ class MainWindow(QMainWindow):
         tray_menu.addAction(self.start_action)
         tray_menu.addAction(self.pause_action)
         tray_menu.addAction(self.quit_action)
+        self.quit_action.triggered.connect(self.exit)
         self.tray.setContextMenu(tray_menu)
         self.tray.show()
 
@@ -57,12 +59,12 @@ class MainWindow(QMainWindow):
             self.tray.setIcon(self.style().standardIcon(QStyle.SP_ComputerIcon))
         self.tray.show()
 
-    def queef(self):
-        pass
+    def exit(self):
+        self.application.quit()
 
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    window = MainWindow()
+    window = MainWindow(app)
     sys.exit(app.exec())
 
