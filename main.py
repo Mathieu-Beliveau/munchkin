@@ -11,7 +11,6 @@ from argparser import parser
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.centralWidget = QWidget()
         self.tray = QSystemTrayIcon()
         self.start_action = QAction("Start", self)
         self.pause_action = QAction("Pause", self)
@@ -36,13 +35,13 @@ class MainWindow(QMainWindow):
         worker = ScreenLocker(self.context, device_address=device_address)
         worker.moveToThread(thread)
         thread.started.connect(worker.polling_start)
+        worker.connection_status_signal.connect(self.report_connection_status)
         self.start_action.triggered.connect(worker.polling_start)
         self.pause_action.triggered.connect(worker.polling_stop)
         self.workers.append(worker)
         return thread
 
     def setup_ui(self):
-        self.setCentralWidget(self.centralWidget)
         self.tray.setIcon(self.style().standardIcon(QStyle.SP_ComputerIcon))
         tray_menu = QMenu()
         tray_menu.addAction(self.start_action)
@@ -50,11 +49,13 @@ class MainWindow(QMainWindow):
         tray_menu.addAction(self.quit_action)
         self.tray.setContextMenu(tray_menu)
         self.tray.show()
-        meh = QPushButton("meh")
-        meh.clicked.connect(self.queef)
-        layout = QVBoxLayout()
-        layout.addWidget(meh)
-        self.centralWidget.setLayout(layout)
+
+    def report_connection_status(self, status):
+        if not status:
+            self.tray.setIcon(self.style().standardIcon(QStyle.SP_TrashIcon))
+        else:
+            self.tray.setIcon(self.style().standardIcon(QStyle.SP_ComputerIcon))
+        self.tray.show()
 
     def queef(self):
         pass
@@ -63,6 +64,5 @@ class MainWindow(QMainWindow):
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     window = MainWindow()
-    window.show()
     sys.exit(app.exec())
 

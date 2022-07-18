@@ -3,13 +3,14 @@ import subprocess
 import threading
 import time
 
-from PyQt5.QtCore import QObject, QTimer
+from PyQt5.QtCore import QObject, QTimer, pyqtSignal
 
 from BlueToothRSSI import BluetoothRSSI
 
 
 class ScreenLocker(QObject):
     SLEEP = 1
+    connection_status_signal = pyqtSignal(bool)
 
     def __init__(self, context, device_address):
         super().__init__()
@@ -22,6 +23,7 @@ class ScreenLocker(QObject):
     def monitor_and_lock(self):
         reads_above_threshold = 0
         if self.brssi .is_connection_active():
+            self.report_connection_active()
             rssi = self.brssi.get_rssi()
             if self.context.calibration_mode:
                 print("Time: {}, Address: {}, rssi: {}".format(datetime.datetime.now(), self.device_address, rssi))
@@ -31,7 +33,14 @@ class ScreenLocker(QObject):
                     subprocess.run("loginctl lock-session ", shell=True)
                     reads_above_threshold = 0
         else:
+            self.report_connection_loss()
             self.brssi.connect()
+
+    def report_connection_active(self):
+        self.connection_status_signal.emit(True)
+
+    def report_connection_loss(self):
+        self.connection_status_signal.emit(False)
 
     def polling_start(self):
         self.poller.start(1000)
