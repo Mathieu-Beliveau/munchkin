@@ -14,16 +14,23 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.tray = QSystemTrayIcon()
+        self.start_action = QAction("Start", self)
+        self.pause_action = QAction("Pause", self)
+        self.quit_action = QAction("Exit", self)
         self.context = parser.parse_args()
         self.setup_ui()
         self.threads = []
+        self.workers = []
+        self.create_threads()
 
-    def monitor(self):
+    def create_threads(self):
         self.threads.clear()
         self.threads = [
             self.create_thread(device_address)
             for device_address in self.context.devices
         ]
+
+    def start_monitoring(self):
         for thread in self.threads:
             thread.start()
 
@@ -31,7 +38,9 @@ class MainWindow(QMainWindow):
         thread = QThread()
         worker = ScreenLocker(self.context, device_address=device_address)
         worker.moveToThread(thread)
-        thread.started.connect(worker.monitor_and_lock)
+        thread.started.connect(worker.polling_start)
+        self.pause_action.triggered.connect(worker.polling_stop)
+        self.workers.append(worker)
         return thread
 
     def setup_ui(self):
@@ -39,24 +48,17 @@ class MainWindow(QMainWindow):
         self.setCentralWidget(self.centralWidget)
         self.tray.setIcon(self.style().standardIcon(QStyle.SP_ComputerIcon))
         # Tray menu
-        show_action = QAction("Show", self)
-        quit_action = QAction("Exit", self)
-        hide_action = QAction("Hide", self)
-        show_action.triggered.connect(self.show)
-        hide_action.triggered.connect(self.hide)
         tray_menu = QMenu()
-        tray_menu.addAction(show_action)
-        tray_menu.addAction(hide_action)
-        tray_menu.addAction(quit_action)
+        tray_menu.addAction(self.start_action)
+        self.start_action.triggered.connect(self.start_monitoring)
+        tray_menu.addAction(self.pause_action)
+        tray_menu.addAction(self.quit_action)
         self.tray.setContextMenu(tray_menu)
         self.tray.show()
-        self.button = QPushButton("start")
-        self.button.clicked.connect(self.monitor)
-        self.meh = QPushButton("meh")
-        self.meh.clicked.connect(self.queef)
+        meh = QPushButton("meh")
+        meh.clicked.connect(self.queef)
         layout = QVBoxLayout()
-        layout.addWidget(self.button)
-        layout.addWidget(self.meh)
+        layout.addWidget(meh)
         self.centralWidget.setLayout(layout)
 
     def queef(self):
