@@ -1,10 +1,11 @@
 import sys
 
 from PyQt5.QtCore import QThread
-from PyQt5.QtWidgets import QApplication, QMainWindow, QSystemTrayIcon, QMenu, QStyle, QAction, QPushButton, \
-    QVBoxLayout, QWidget
+from PyQt5.QtGui import QIcon
+from PyQt5.QtWidgets import QApplication, QMainWindow, QSystemTrayIcon, QMenu, QAction
 
 from ScreenLocker import ScreenLocker
+from Status import Status
 from argparser import parser
 
 
@@ -18,6 +19,7 @@ class MainWindow(QMainWindow):
         self.quit_action = QAction("Exit", self)
         self.context = parser.parse_args()
         self.setup_ui()
+        self.status = Status.RUNNING
         self.threads = []
         self.workers = []
         self.create_threads()
@@ -43,21 +45,49 @@ class MainWindow(QMainWindow):
         return thread
 
     def setup_ui(self):
-        self.tray.setIcon(self.style().standardIcon(QStyle.SP_ComputerIcon))
+        self.tray.setIcon(self.get_standard_icon())
         tray_menu = QMenu()
         tray_menu.addAction(self.start_action)
+        self.start_action.triggered.connect(self.set_running)
         tray_menu.addAction(self.pause_action)
+        self.pause_action.triggered.connect(self.set_paused)
         tray_menu.addAction(self.quit_action)
         self.quit_action.triggered.connect(self.exit)
         self.tray.setContextMenu(tray_menu)
         self.tray.show()
 
-    def report_connection_status(self, status):
-        if not status:
-            self.tray.setIcon(self.style().standardIcon(QStyle.SP_TrashIcon))
-        else:
-            self.tray.setIcon(self.style().standardIcon(QStyle.SP_ComputerIcon))
-        self.tray.show()
+    def set_running(self):
+        self.status = Status.RUNNING
+        self.update_icon()
+
+    def set_paused(self):
+        self.status = Status.PAUSED
+        self.update_icon()
+
+    def report_connection_status(self, is_connected):
+        if not is_connected and self.status != Status.CONNECTION_LOST:
+            self.status = Status.CONNECTION_LOST
+            self.update_icon()
+        elif self.status != Status.RUNNING and self.status != Status.PAUSED:
+            self.status = Status.RUNNING
+            self.update_icon()
+
+    def update_icon(self):
+        if self.status == Status.RUNNING:
+            self.tray.setIcon(self.get_standard_icon())
+        elif self.status == Status.PAUSED:
+            self.tray.setIcon(self.get_paused_icon())
+        elif self.status == Status.CONNECTION_LOST:
+            self.tray.setIcon(self.get_connection_loss_icon())
+
+    def get_standard_icon(self):
+        return QIcon("icons/{}/standard.svg".format(self.context.theme))
+
+    def get_paused_icon(self):
+        return QIcon("icons/{}/paused.svg".format(self.context.theme))
+
+    def get_connection_loss_icon(self):
+        return QIcon("icons/{}/connection_lost.svg".format(self.context.theme))
 
     def exit(self):
         self.application.quit()
