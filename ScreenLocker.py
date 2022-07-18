@@ -1,7 +1,5 @@
 import datetime
 import subprocess
-import threading
-import time
 
 from PyQt5.QtCore import QObject, QTimer, pyqtSignal
 

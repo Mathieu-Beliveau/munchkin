@@ -95,6 +95,7 @@ class MainWindow(QMainWindow):
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
+    app.setApplicationName("Munchkin")
     window = MainWindow(app)
     sys.exit(app.exec())
 
