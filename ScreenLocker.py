@@ -17,19 +17,22 @@ class ScreenLocker(QObject):
         self.poller = QTimer(self)
         self.poller.timeout.connect(self.monitor_and_lock)
         self.brssi = BluetoothRSSI(addr=self.device_address)
+        self.reads_above_threshold = 0
 
     def monitor_and_lock(self):
-        reads_above_threshold = 0
         if self.brssi .is_connection_active():
             self.report_connection_active()
             rssi = self.brssi.get_rssi()
             if self.context.calibration_mode:
                 print("Time: {}, Address: {}, rssi: {}".format(datetime.datetime.now(), self.device_address, rssi))
             if rssi >= self.context.min_sensitivity:
-                reads_above_threshold += 1
-                if reads_above_threshold >= self.context.min_consecutives:
-                    subprocess.run("loginctl lock-session ", shell=True)
-                    reads_above_threshold = 0
+                self.reads_above_threshold += 1
+                if self.reads_above_threshold >= self.context.min_consecutives:
+                    if not self.context.calibration_mode:
+                        subprocess.run("loginctl lock-session ", shell=True)
+                    else:
+                        print("Screen locking would have occurred!")
+                    self.reads_above_threshold = 0
         else:
             self.report_connection_loss()
             self.brssi.connect()
