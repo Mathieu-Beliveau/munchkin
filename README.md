@@ -17,6 +17,37 @@ distance from your PC.
 The application lives in your system tray. It will show a red icon when encountering a true connection loss.
 To prevent locking the user out, the application enters standby mode when failing to reach your bluetooth devices.
 
+## Building
+
+**Binaries are distributed on the project repository; you can download them directly from there.**
+
+If you wish to build against your operating system, some python knowledge is assumed:
+
+Install the following dependencies preferably in a ``venv``:
+
+- pybluez
+- PyQt5
+
+Install ``pyinstaller`` through your favorite package manager.
+
+Then generate a standalone executable with, at the projet's root: 
+
+``pyinstaller -p ./.venv/lib/python3.8/site-packages/ --name munchkin --onefile ./cli.py``
+
+(where we specify the venv site-packages to avoid conflicts against system libraries.)
+
+Pyinstaller will generate the final binary in the ``dist`` folder.
+
+### Note: 
+
+The application's icons are bundled as a Qt resource using:
+
+``pyrcc5 ./icons.qrc -o ./munchkin/icons_resource.py``
+
+(On Ubuntu, ``pyrcc5`` is part of the ``pyqt5-dev-tools`` package)
+
+This is required such that the tray icons will show up once the application has been bundled by ``pyinstaller``.
+
 ## Runtime Arguments
 
 ``--devices`` A comma separated list of bluetooth addresses to scan for (in the XX:XX:XX:XX:XX:XX format).
