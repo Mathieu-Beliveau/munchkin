@@ -20,7 +20,7 @@ class ScreenLocker(QObject):
         self.reads_above_threshold = 0
 
     def monitor_and_lock(self):
-        if self.brssi .is_connection_active():
+        if self.brssi.is_connection_active():
             self.report_connection_active()
             rssi = self.brssi.get_rssi()
             if self.context.calibration_mode:
