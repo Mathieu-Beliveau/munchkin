@@ -19,7 +19,9 @@ To prevent locking the user out, the application enters standby mode when failin
 
 ## Building
 
-**Binaries are distributed on the project repository; you can download them directly from there.**
+**Binaries are distributed on the project repository; you can download them directly from there:**
+
+https://github.com/Mathieu-Beliveau/munchkin/releases
 
 If you wish to build against your operating system, some python knowledge is assumed:
 
