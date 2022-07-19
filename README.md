@@ -6,11 +6,11 @@ Munchkin is a simple python application to automatically lock your screen when y
 
 ## How it works
 
-The application looks for a list of bluetooth devices (specified with the --devices arg.) 
+The application looks for a list of bluetooth devices (specified with the --devices arg) 
 and will lock the screen as soon as the link quality between your PC and any of those devices drops.
 
 The metric for accessing the link quality is the standard RSSI value where 0 is considered optimal and 
-any value above is a mark of a degradation of some kind. For this reason, the application works bests in a noisy 
+any value above is considered as a degradation of some kind. For this reason, the application works bests in a noisy 
 environment where the signal would quickly degrade as soon your connected device is at some small
 distance from your PC.
 
