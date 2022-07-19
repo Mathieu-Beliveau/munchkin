@@ -11,3 +11,5 @@ parser.add_argument('--theme', metavar='theme', type=str, default='dark', requir
                     help='Icon theme to use.', choices=['dark', 'white'])
 parser.add_argument('--min-consecutives', metavar='min_consecutives', type=int, default=1, required=False,
                     help='Minimal number of consecutive RSSI reads above min-sensitivity required to lock screen.')
+parser.add_argument('--screen-lock-command', metavar='screen_lock_command', type=str, default='loginctl lock-session', required=False,
+                    help='The shell command to be used to lock the screen')

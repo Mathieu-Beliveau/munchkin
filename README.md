@@ -50,7 +50,9 @@ The application's icons are bundled as a Qt resource using:
 
 This is required such that the tray icons will show up once the application has been bundled by ``pyinstaller``.
 
-## Runtime Arguments
+## Runtime Parameters
+
+*The application expects that the bluetooth connection between your device(s) and your computer is already established.*
 
 ``--devices`` A comma separated list of bluetooth addresses to scan for (in the XX:XX:XX:XX:XX:XX format).
 

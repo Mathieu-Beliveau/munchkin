@@ -29,7 +29,7 @@ class ScreenLocker(QObject):
                 self.reads_above_threshold += 1
                 if self.reads_above_threshold >= self.context.min_consecutives:
                     if not self.context.calibration_mode:
-                        subprocess.run("loginctl lock-session ", shell=True)
+                        subprocess.run(self.context.screen_lock_command, shell=True)
                     else:
                         print("Screen locking would have occurred!")
                     self.reads_above_threshold = 0
