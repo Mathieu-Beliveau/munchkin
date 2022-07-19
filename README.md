@@ -56,7 +56,7 @@ This is required such that the tray icons will show up once the application has 
 
 ``--min-sensitivity`` The integer RSSI value above which Munchkin will lock the screen (defaults to 1). This can be increased if you experience unwanted locking.
 
-``--min-consecutives`` The minimal (integer) number of consecutive RSSI values above ``min-sensitivity`` after which the screen will be locked (defaults to 1). Like the above setting, this can also be increased to prevent unwanted locks.
+``--min-consecutives`` The minimal (integer) number of consecutive RSSI values above ``min-sensitivity`` after which the screen will be locked (defaults to 1). Like the above setting, this can also be increased to prevent unwanted screen locking.
 
 ``--calibration-mode`` Either true or false, sets the application in calibration mode where scanned RSSI values will be displayed and screen locking will be prevented.
 

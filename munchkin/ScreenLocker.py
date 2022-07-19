@@ -7,7 +7,7 @@ from munchkin.BlueToothRSSI import BluetoothRSSI
 
 
 class ScreenLocker(QObject):
-    SLEEP = 1
+    REFRESH_RATE_IN_MS = 1000
     connection_status_signal = pyqtSignal(bool)
 
     def __init__(self, context, device_address):
@@ -44,7 +44,7 @@ class ScreenLocker(QObject):
         self.connection_status_signal.emit(False)
 
     def polling_start(self):
-        self.poller.start(1000)
+        self.poller.start(self.REFRESH_RATE_IN_MS)
 
     def polling_stop(self):
         self.poller.stop()

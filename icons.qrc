@@ -3,8 +3,8 @@
    <file>icons/dark/connection_lost.svg</file>
    <file>icons/dark/paused.svg</file>
    <file>icons/dark/standard.svg</file>
-      <file>icons/dark/connection_lost.svg</file>
-   <file>icons/dark/paused.svg</file>
-   <file>icons/dark/standard.svg</file>
+   <file>icons/white/connection_lost.svg</file>
+   <file>icons/white/paused.svg</file>
+   <file>icons/white/standard.svg</file>
 </qresource>
 </RCC>
