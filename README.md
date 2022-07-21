@@ -56,6 +56,8 @@ This is required such that the tray icons will show up once the application has 
 
 ``--devices`` A comma separated list of bluetooth addresses to scan for (in the XX:XX:XX:XX:XX:XX format).
 
+``--screen-lock-command`` The shell command to be used to lock the screen (defaults to: ``loginctl lock-session``)
+
 ``--min-sensitivity`` The integer RSSI value above which Munchkin will lock the screen (defaults to 1). This can be increased if you experience unwanted locking.
 
 ``--min-consecutives`` The minimal (integer) number of consecutive RSSI values above ``min-sensitivity`` after which the screen will be locked (defaults to 1). Like the above setting, this can also be increased to prevent unwanted screen locking.

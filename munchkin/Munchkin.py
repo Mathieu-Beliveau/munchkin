@@ -36,7 +36,7 @@ class Munchkin(QMainWindow):
         thread = QThread()
         worker = ScreenLocker(self.context, device_address=device_address)
         worker.moveToThread(thread)
-        thread.started.connect(worker.polling_start)
+        thread.started.connect(worker.run)
         worker.connection_status_signal.connect(self.report_connection_status)
         self.start_action.triggered.connect(worker.polling_start)
         self.pause_action.triggered.connect(worker.polling_stop)
@@ -64,9 +64,10 @@ class Munchkin(QMainWindow):
         self.update_icon()
 
     def report_connection_status(self, is_connected):
-        if not is_connected and self.status != Status.CONNECTION_LOST:
-            self.status = Status.CONNECTION_LOST
-            self.update_icon()
+        if not is_connected:
+            if self.status != Status.CONNECTION_LOST:
+                self.status = Status.CONNECTION_LOST
+                self.update_icon()
         elif self.status != Status.RUNNING and self.status != Status.PAUSED:
             self.status = Status.RUNNING
             self.update_icon()
